@@ -5,12 +5,14 @@ package rocks.fede.rankingBot;
  */
 public class ScoreBot {
 
-    public static void getUpdatedRank(double teamAvg, double opponentsAvg, int teamScore, int opponentScore) {
+    public static final int TOP_SCORE = 100;
+
+    public static double getUpdatedRank(double teamRank, double opponentsRank, int teamScore, int opponentScore) {
         //TODO return updated Player rank that reflects latest match results.
+        return 0;
     };
 
-    public static void getExpectationFactor(double teamAvg, double opponentsAvg) {
-        //TODO return normalized scoring difference between winner and loser.
+    public static double getExpectationFactor(double teamRank, double opponentsRank) {
+        return Math.abs(teamRank - opponentsRank) / ScoreBot.TOP_SCORE;
     }
-
 }

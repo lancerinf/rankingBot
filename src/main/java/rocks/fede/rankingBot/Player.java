@@ -5,7 +5,7 @@ package rocks.fede.rankingBot;
  */
 public class Player {
 
-    private static final double DEFAULT_INITIAL_SCORE = 50;
+    private static final double DEFAULT_INITIAL_SCORE = ScoreBot.TOP_SCORE/2;
     private double rank;
     private String name;
 

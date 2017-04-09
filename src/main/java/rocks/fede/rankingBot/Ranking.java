@@ -9,7 +9,6 @@ import java.util.stream.Stream;
  */
 public class Ranking {
 
-    public static final int TOP_SCORE = 100;
     private String name;
     private List<Player> players;
 
@@ -18,13 +17,38 @@ public class Ranking {
         this.players = new ArrayList<Player>();
     }
 
-    public void newMatch(Match match) {
-        updatePlayerList(match.getTeam0());
-        updatePlayerList(match.getTeam1());
-        
+    public String getRankingName() {
+        return this.name;
     }
 
-    private void updatePlayerList(String[] team){
+    private Player getPlayer(String playerName) {
+        return players.stream()
+                .filter(player -> player.getName().equalsIgnoreCase(playerName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void newMatch(Match match) {
+        updatePlayersList(match);
+        updateTeamScore(match.getTeam0(), match.getTeam1(), match.getTeam0Score(), match.getTeam1Score());
+        updateTeamScore(match.getTeam1(), match.getTeam0(), match.getTeam1Score(), match.getTeam0Score());
+    }
+
+    private void updateTeamScore(String[] team, String[] opponentTeam, int score, int opponentScore) {
+        Stream.of(team).forEach(playerName -> {
+            this.getPlayer(playerName).updateScore(ScoreBot.getUpdatedRank(getTeamRank(team),
+                            getTeamRank(opponentTeam),
+                            score,
+                            opponentScore));
+        });
+    }
+
+    private void updatePlayersList(Match match){
+        updateTeamList(match.getTeam0());
+        updateTeamList(match.getTeam1());
+    }
+
+    private void updateTeamList(String[] team){
         Stream.of(team).forEach(playerName -> {
             if ( players.stream().noneMatch(x -> x.getName().equalsIgnoreCase(playerName)) ) {
                 this.players.add(new Player(playerName));
@@ -32,7 +56,7 @@ public class Ranking {
         });
     }
 
-    public double getTeamAvgScore(String[] team) {
+    public double getTeamRank(String[] team) {
         return Stream.of(team)
                 .map(playerName -> this.players.stream()
                         .filter(player -> player.getName().equalsIgnoreCase(playerName))
