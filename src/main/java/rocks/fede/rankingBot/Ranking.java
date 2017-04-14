@@ -28,29 +28,35 @@ public class Ranking {
     }
 
     public void newMatch(String player0_0, int team0_score, String player1_0, int team1_score) {
-        List<String> players = new ArrayList<>();
-        players.add(player0_0);
-        players.add(player1_0);
-        updatePlayersList(players);
+        List<String> team0 = new ArrayList<>();
+        List<String> team1 = new ArrayList<>();
+        team0.add(player0_0);
+        team1.add(player1_0);
+        updatePlayersList(team0);
+        updatePlayersList(team1);
         //TODO update players score to account for new match
     }
 
     public void newMatch(String player0_0, String player0_1, int team0_score, String player1_0, int team1_score) {
-        List<String> players = new ArrayList<>();
-        players.add(player0_0);
-        players.add(player0_1);
-        players.add(player1_0);
-        updatePlayersList(players);
+        List<String> team0 = new ArrayList<>();
+        List<String> team1 = new ArrayList<>();
+        team0.add(player0_0);
+        team0.add(player0_1);
+        team1.add(player1_0);
+        updatePlayersList(team0);
+        updatePlayersList(team1);
         //TODO update players score to account for new match
     }
 
     public void newMatch(String player0_0, String player0_1, int team0_score, String player1_0, String player1_1, int team1_score) {
-        List<String> players = new ArrayList<>();
-        players.add(player0_0);
-        players.add(player0_1);
-        players.add(player1_0);
-        players.add(player1_1);
-        updatePlayersList(players);
+        List<String> team0 = new ArrayList<>();
+        List<String> team1 = new ArrayList<>();
+        team0.add(player0_0);
+        team0.add(player0_1);
+        team1.add(player1_0);
+        team1.add(player1_1);
+        updatePlayersList(team0);
+        updatePlayersList(team1);
         //TODO update players score to account for new match
     }
 
