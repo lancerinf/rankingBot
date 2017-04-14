@@ -1,7 +1,9 @@
 package rocks.fede.rankingBot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -10,59 +12,71 @@ import java.util.stream.Stream;
 public class Ranking {
 
     private String name;
-    private List<Player> players;
+    private Map<String,Double> ranking;
 
     public Ranking(String name) {
         this.name = name;
-        this.players = new ArrayList<Player>();
+        this.ranking = new HashMap<>();
     }
 
     public String getRankingName() {
         return this.name;
     }
 
-    private Player getPlayer(String playerName) {
-        return players.stream()
-                .filter(player -> player.getName().equalsIgnoreCase(playerName))
-                .findFirst()
-                .orElse(null);
+    private double getPlayerRanking(String playerName) {
+        return this.ranking.get(playerName);
     }
 
-    public void newMatch(Match match) {
-        updatePlayersList(match);
-        updateTeamScore(match.getTeam0(), match.getTeam1(), match.getTeam0Score(), match.getTeam1Score());
-        updateTeamScore(match.getTeam1(), match.getTeam0(), match.getTeam1Score(), match.getTeam0Score());
+    public void newMatch(String player0_0, int team0_score, String player1_0, int team1_score) {
+        List<String> players = new ArrayList<>();
+        players.add(player0_0);
+        players.add(player1_0);
+        updatePlayersList(players);
+        //TODO update players score to account for new match
     }
 
-    private void updateTeamScore(String[] team, String[] opponentTeam, int score, int opponentScore) {
-        Stream.of(team).forEach(playerName -> {
-            this.getPlayer(playerName).updateScore(ScoreBot.getUpdatedRank(getTeamRank(team),
-                            getTeamRank(opponentTeam),
-                            score,
-                            opponentScore));
+    public void newMatch(String player0_0, String player0_1, int team0_score, String player1_0, int team1_score) {
+        List<String> players = new ArrayList<>();
+        players.add(player0_0);
+        players.add(player0_1);
+        players.add(player1_0);
+        updatePlayersList(players);
+        //TODO update players score to account for new match
+    }
+
+    public void newMatch(String player0_0, String player0_1, int team0_score, String player1_0, String player1_1, int team1_score) {
+        List<String> players = new ArrayList<>();
+        players.add(player0_0);
+        players.add(player0_1);
+        players.add(player1_0);
+        players.add(player1_1);
+        updatePlayersList(players);
+        //TODO update players score to account for new match
+    }
+
+    private void updateScores(String[] team, String[] opponentTeam, int score, int opponentScore) {
+        //TODO implement Ranking.updateScores method
+        //Stream.of(team).forEach(playerName -> );
+    }
+
+    private void updatePlayersList(List<String> playerNames){
+        playerNames.stream().forEach(playerName -> {
+            if (! this.ranking.containsKey(playerName)) this.ranking.put(playerName, ScoreBot.TOP_SCORE/2);
         });
     }
 
-    private void updatePlayersList(Match match){
-        updateTeamList(match.getTeam0());
-        updateTeamList(match.getTeam1());
+    public void printRanking() {
+        System.out.println(this.getRankingName());
+        this.ranking.entrySet().stream()
+                .sorted( (entry1, entry2) -> Double.compare(entry1.getValue(),entry2.getValue()) )
+                .forEach( entry -> System.out.println( entry.getKey() + " - " + entry.getValue()));
     }
 
-    private void updateTeamList(String[] team){
-        Stream.of(team).forEach(playerName -> {
-            if ( players.stream().noneMatch(x -> x.getName().equalsIgnoreCase(playerName)) ) {
-                this.players.add(new Player(playerName));
-            }
-        });
-    }
 
     public double getTeamRank(String[] team) {
-        return Stream.of(team)
-                .map(playerName -> this.players.stream()
-                        .filter(player -> player.getName().equalsIgnoreCase(playerName))
-                        .findFirst()
-                        .orElse(null))
-                .mapToDouble(Player::getScore)
+        return this.ranking.entrySet().stream()
+                .filter( entry -> Stream.of(team).anyMatch( team_player -> team_player.equalsIgnoreCase(entry.getKey()) ))
+                .mapToDouble(p -> p.getValue())
                 .average()
                 .getAsDouble();
     }

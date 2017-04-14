@@ -9,7 +9,7 @@ public class Main {
         double myRank = 50;
         double opponentRank = 20;
         int TOP_SCORE = 25;
-        int predictedResult = ScoreBot.predictLowerScore(myRank,opponentRank,TOP_SCORE);
+        int predictedResult = ScoreBot.getPredictedLowerScore(myRank,opponentRank,TOP_SCORE);
         System.out.println("With my team at rank " + myRank + " and opponent at rank " + opponentRank + " the predicted result is " + TOP_SCORE + " - " + predictedResult);
 
 //        double base = -3.0;
@@ -19,6 +19,10 @@ public class Main {
 //            System.out.println("SND (" + Math.round(currentStep*100)/100.00 + ") = " + ScoreBot.sndVal(currentStep));
 //        }
 
-        System.out.println("differenceAmplificationFactor = " + ScoreBot.getDifferenceAmplificationFactor(myRank,opponentRank) );
+//        System.out.println("differenceAmplificationFactor = " + ScoreBot.getDifferenceAmplificationFactor(myRank,opponentRank) );
+
+        Ranking overall = new Ranking("Overall ranking");
+        overall.newMatch( "federico" , 10, "sofia", 5);
+        overall.printRanking();
     }
 }
