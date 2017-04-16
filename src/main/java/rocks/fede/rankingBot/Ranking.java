@@ -23,67 +23,69 @@ public class Ranking {
         return this.name;
     }
 
-    private double getPlayerRanking(String playerName) {
-        return this.ranking.get(playerName);
+    public List<String> createTeam(String player0) {
+        List<String> team = new ArrayList<>();
+        team.add(player0);
+        if (! this.ranking.containsKey(player0)) this.ranking.put(player0, ScoreBot.TOP_SCORE/2);
+        return team;
+    }
+
+    public List<String> createTeam(String player0, String player1) {
+        List<String> team = new ArrayList<>();
+        team.add(player0);
+        team.add(player1);
+        if (! this.ranking.containsKey(player0)) this.ranking.put(player0, ScoreBot.TOP_SCORE/2);
+        if (! this.ranking.containsKey(player0)) this.ranking.put(player1, ScoreBot.TOP_SCORE/2);
+        return team;
+    }
+
+    public double getTeamRank(List<String> team) {
+        return this.ranking.entrySet().stream()
+                .filter( entry -> team.stream().anyMatch( team_player -> team_player.equalsIgnoreCase(entry.getKey()) ))
+                .mapToDouble(p -> p.getValue())
+                .average()
+                .getAsDouble();
+    }
+
+    private void updatePlayerRank(String playerName, double suggestedRankAdjustment) {
+        double sndAdjustment = ScoreBot.sndRankAdjustment(this.ranking.get(playerName), suggestedRankAdjustment);
+        System.out.println("Player " + playerName + " ranking adjustment = " + sndAdjustment);
+        this.ranking.put(playerName, this.ranking.get(playerName) + sndAdjustment);
+    }
+
+    private void updateTeamRanking(List<String> team, double suggestedRankAdjustment) {
+        System.out.println("Suggested rank adjustment = " + suggestedRankAdjustment);
+        team.stream().forEach(player -> this.updatePlayerRank(player, suggestedRankAdjustment));
+    }
+
+    public void updateRankings(List<String> team0, int team0_score, List<String> team1, int team1_score) {
+        double team0RankAdjustment = ScoreBot.getRankAdjustment(getTeamRank(team0), team0_score, getTeamRank(team1), team1_score);
+        updateTeamRanking(team0, team0RankAdjustment);
+        updateTeamRanking(team1, - team0RankAdjustment);
     }
 
     public void newMatch(String player0_0, int team0_score, String player1_0, int team1_score) {
-        List<String> team0 = new ArrayList<>();
-        List<String> team1 = new ArrayList<>();
-        team0.add(player0_0);
-        team1.add(player1_0);
-        updatePlayersList(team0);
-        updatePlayersList(team1);
-        //TODO update players score to account for new match
+        List<String> team0 = createTeam(player0_0);
+        List<String> team1 = createTeam(player1_0);
+        updateRankings(team0, team0_score, team1, team1_score);
     }
 
     public void newMatch(String player0_0, String player0_1, int team0_score, String player1_0, int team1_score) {
-        List<String> team0 = new ArrayList<>();
-        List<String> team1 = new ArrayList<>();
-        team0.add(player0_0);
-        team0.add(player0_1);
-        team1.add(player1_0);
-        updatePlayersList(team0);
-        updatePlayersList(team1);
-        //TODO update players score to account for new match
+        List<String> team0 = createTeam(player0_0, player0_1);
+        List<String> team1 = createTeam(player1_0);
+        updateRankings(team0, team0_score, team1, team1_score);
     }
 
     public void newMatch(String player0_0, String player0_1, int team0_score, String player1_0, String player1_1, int team1_score) {
-        List<String> team0 = new ArrayList<>();
-        List<String> team1 = new ArrayList<>();
-        team0.add(player0_0);
-        team0.add(player0_1);
-        team1.add(player1_0);
-        team1.add(player1_1);
-        updatePlayersList(team0);
-        updatePlayersList(team1);
-        //TODO update players score to account for new match
-    }
-
-    private void updateScores(String[] team, String[] opponentTeam, int score, int opponentScore) {
-        //TODO implement Ranking.updateScores method
-        //Stream.of(team).forEach(playerName -> );
-    }
-
-    private void updatePlayersList(List<String> playerNames){
-        playerNames.stream().forEach(playerName -> {
-            if (! this.ranking.containsKey(playerName)) this.ranking.put(playerName, ScoreBot.TOP_SCORE/2);
-        });
+        List<String> team0 = createTeam(player0_0, player0_1);
+        List<String> team1 = createTeam(player1_0, player1_1);
+        updateRankings(team0, team0_score, team1, team1_score);
     }
 
     public void printRanking() {
         System.out.println(this.getRankingName());
         this.ranking.entrySet().stream()
-                .sorted( (entry1, entry2) -> Double.compare(entry1.getValue(),entry2.getValue()) )
+                .sorted( (entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()) )
                 .forEach( entry -> System.out.println( entry.getKey() + " - " + entry.getValue()));
-    }
-
-
-    public double getTeamRank(String[] team) {
-        return this.ranking.entrySet().stream()
-                .filter( entry -> Stream.of(team).anyMatch( team_player -> team_player.equalsIgnoreCase(entry.getKey()) ))
-                .mapToDouble(p -> p.getValue())
-                .average()
-                .getAsDouble();
     }
 }
