@@ -1,9 +1,6 @@
 package rocks.fede.rankingBot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -28,16 +25,13 @@ public class Ranking {
     }
 
     public List<String> createTeam(String player0) {
-        List<String> team = new ArrayList<>();
-        team.add(player0);
+        List<String> team = Arrays.asList(player0);
         if (! this.ranking.containsKey(player0)) this.ranking.put(player0, ScoreBot.TOP_RANK/2);
         return team;
     }
 
     public List<String> createTeam(String player0, String player1) {
-        List<String> team = new ArrayList<>();
-        team.add(player0);
-        team.add(player1);
+        List<String> team = Arrays.asList(player0, player1);
         if (! this.ranking.containsKey(player0)) this.ranking.put(player0, ScoreBot.TOP_RANK/2);
         if (! this.ranking.containsKey(player1)) this.ranking.put(player1, ScoreBot.TOP_RANK/2);
         return team;
@@ -53,12 +47,10 @@ public class Ranking {
 
     private void updatePlayerRank(String playerName, double suggestedRankAdjustment) {
         double sndAdjustment = ScoreBot.sndRankAdjustment(this.ranking.get(playerName), suggestedRankAdjustment);
-//        System.out.println("Player " + playerName + " ranking adjustment = " + sndAdjustment);
         this.ranking.put(playerName, this.ranking.get(playerName) + sndAdjustment);
     }
 
     private void updateTeamRanking(List<String> team, double suggestedRankAdjustment) {
-//        System.out.println("Suggested rank adjustment = " + suggestedRankAdjustment);
         team.stream().forEach(player -> updatePlayerRank(player, suggestedRankAdjustment));
     }
 
