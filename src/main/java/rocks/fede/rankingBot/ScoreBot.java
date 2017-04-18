@@ -5,19 +5,15 @@ package rocks.fede.rankingBot;
  */
 public class ScoreBot {
 
+    // TOP_RANK is the maximum theoretical rank that a player can tend to.
     public static final double TOP_RANK = 100;
 
-    // BOOST_NORMAL_EXPANSION is used to project a ratio onto a SND.
-    public static final double BOOST_NORMAL_EXPANSION = 4.0;
+    // SND_VALUE_EXPANSION is tipically used to project a ratio with values in [0,1] onto a value [0,3] of which we
+    // calculate the SND value, with the understanding that SND(3) = 99.7%.
+    public static final double SND_VALUE_EXPANSION = 3.0;
 
-    // BOOST_AMPLIFICATION is used to add some weight to the getDifferenceAmplificationFactor method.
-    public static final double BOOST_AMPLIFICATION = 3.0;
-
-    // RANK_ADJUSTMENT_NORMAL_EXPANSION is used to change the suggested rank adjustment between 100% to 10% of the SND value in 0.
-    public static final double RANK_ADJUSTMENT_NORMAL_EXPANSION = 3;
-
-    // RANK_ADJUSTMENT_NORMALIZATION_FACTOR is used to bring SND values in range [0,1] instead of [0,0.4].
-    public static final double RANK_ADJUSTMENT_NORMALIZATION_FACTOR = 1.0 / Math.sqrt(2*Math.PI);
+    // SND_RANGE_ADJUSTMENT is used to bring SND values from range [0,Math.sqrt(2*Math.PI)] to range [0,1].
+    public static final double SND_RANGE_ADJUSTMENT = 1.0 / Math.sqrt(2*Math.PI);
 
 
     public static double getPredictedScoreDiff(double teamRank, double opponentsRank, int topScore) {
@@ -35,13 +31,13 @@ public class ScoreBot {
     };
 
     public static double getDifferenceAmplificationFactor(double teamRank, double opponentsRank) {
-        double normalizedRankDiff = ((teamRank - opponentsRank) / ScoreBot.TOP_RANK) * ScoreBot.BOOST_NORMAL_EXPANSION;
-        return (1.0 + (sndVal(normalizedRankDiff) - sndVal(ScoreBot.BOOST_NORMAL_EXPANSION)) * ScoreBot.BOOST_AMPLIFICATION);
+        double normalizedRankDiff = ((teamRank - opponentsRank) / ScoreBot.TOP_RANK) * ScoreBot.SND_VALUE_EXPANSION;
+        return 1.0 + (sndVal(normalizedRankDiff) - sndVal(ScoreBot.SND_VALUE_EXPANSION)) / ScoreBot.SND_RANGE_ADJUSTMENT;
     }
 
     public static double sndRankAdjustment(double currentRank, double suggestedAdjustment) {
-        double normalRank = ((currentRank - ScoreBot.TOP_RANK/2) / (ScoreBot.TOP_RANK/2)) * ScoreBot.RANK_ADJUSTMENT_NORMAL_EXPANSION;
-        return suggestedAdjustment * (ScoreBot.sndVal(normalRank) - ScoreBot.sndVal(ScoreBot.RANK_ADJUSTMENT_NORMAL_EXPANSION)) / ScoreBot.RANK_ADJUSTMENT_NORMALIZATION_FACTOR;
+        double normalRank = ((currentRank - ScoreBot.TOP_RANK/2) / (ScoreBot.TOP_RANK/2)) * ScoreBot.SND_VALUE_EXPANSION;
+        return suggestedAdjustment * (ScoreBot.sndVal(normalRank) - ScoreBot.sndVal(ScoreBot.SND_VALUE_EXPANSION)) / ScoreBot.SND_RANGE_ADJUSTMENT;
     }
 
     public static double sndVal(double z) {
