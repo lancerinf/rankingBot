@@ -11,8 +11,8 @@ public class ScoreBot {
     // MAX_RANK_ADJUSTMENT is the maximum rank adjustment per game.
     public static final double MAX_RANK_ADJUSTMENT = TOP_RANK/10;
 
-    // SND_VALUE_EXPANSION is used to project values in [0,1] onto [0,3] of which we calculate the SND value, knowing
-    // that values close to 3 will approximate 0.
+    // SND_VALUE_EXPANSION is used to project values in [0,1] onto [0,SND_VALUE_EXPANSION] of which we calculate the
+    // SND value, knowing that values close to SND_VALUE_EXPANSION will be very low compared to values in 0.
     public static final double SND_VALUE_EXPANSION = 2.33;
 
     // SND_RANGE_ADJUSTMENT is used to bring SND values from range [0,1/Math.sqrt(2*Math.PI)] to range [0,1].
