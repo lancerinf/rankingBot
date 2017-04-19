@@ -19,21 +19,30 @@ public class Main {
 //        System.out.println("With my team at rank " + myRank + " and opponent at rank " + opponentRank + " the predicted result is " + TOP_RANK + " - " + predictedResult);
 
 //        Ranking overall = new Ranking("Overall ranking");
-//        for (int i = 0; i < 10; i++) {
-//            overall.newMatch("federico" , 10, "sofia", 5);
+//        for (int i = 0; i <= 5; i++) {
+//            overall.newMatch("federico" , 10, "sofia", 4);
+//            overall.printRanking();
 //        }
+//        for (int i = 0; i < 1; i++) {
+//            overall.newMatch("federico" , 5, "sofia", 10);
+//            overall.printRanking();
+//        }
+//        overall.newMatch("federico" , 7, "sofia", 10);
+//        overall.newMatch("federico" , 10, "sofia", 0);
+//        overall.newMatch("federico" , 10, "sofia", 5);
+//        overall.newMatch("federico" , 10, "sofia", 2);
 //        overall.newMatch("federico" , 10, "sofia", 7);
-//        overall.newMatch("federico" , 10, "andrea", 7);
 //        overall.newMatch("federico" ,"andrea", 6, "sofia", 10);
 //        overall.newMatch("federico" , 5, "sofia","mirella", 10);
-//        overall.newMatch("federico" ,"andrea", 10, "sofia","mirella", 4);
+//        overall.newMatch("federico" ,"sofia", 10, "andrea","mirella", 4);
+//        overall.newMatch("federico" , 4, "andrea","mirella", 10);
 //        overall.printRanking();
 
-        List<String> team0 = Arrays.asList("federico", "sofia");
-        List<String> team1 = Arrays.asList("andrea", "mirella");
-
-        try {
-            StorageBackend backendHandle = new FileStorageBackend();
+//        List<String> team0 = Arrays.asList("federico", "sofia");
+//        List<String> team1 = Arrays.asList("andrea", "mirella");
+//
+//        try {
+//            StorageBackend backendHandle = new FileStorageBackend();
 //            backendHandle.newRanking("overall");
 //            backendHandle.persistMatch("overall", getInstant(), team0,10, team1, 1 );
 //            Thread.sleep(100);
@@ -44,10 +53,10 @@ public class Main {
 //            backendHandle.persistMatch("overall", getInstant(), team0,10, team1, 4 );
 //            backendHandle.deleteMatch("overall", "T20170419-002004855");
 //            backendHandle.deleteMatch("overall", "T20170419-001935419");
-            backendHandle.getPersistedMatches("overall").forEachRemaining(System.out::println);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//            backendHandle.getPersistedMatches("overall").forEachRemaining(System.out::println);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static String getInstant() {
