@@ -1,5 +1,6 @@
 package rocks.fede.rankingBot;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -11,18 +12,26 @@ import java.util.List;
  */
 public class Main {
 
-    public static void main(String[] args){
-//        double myRank = 50;
-//        double opponentRank = 20;
-//        int TOP_RANK = 25;
-//        int predictedResult = TOP_RANK - (int) ScoreBot.getPredictedScoreDiff(myRank,opponentRank,TOP_RANK);
-//        System.out.println("With my team at rank " + myRank + " and opponent at rank " + opponentRank + " the predicted result is " + TOP_RANK + " - " + predictedResult);
+    public static void main(String[] args) {
+        try {
+            StorageBackend fileStorage = new FileStorageBackend();
+            Ranking overall = new Ranking("Overall ranking", fileStorage);
 
-//        Ranking overall = new Ranking("Overall ranking");
-//        for (int i = 0; i <= 5; i++) {
-//            overall.newMatch("federico" , 10, "sofia", 4);
-//            overall.printRanking();
-//        }
+            List<String> team0 = Arrays.asList("federico", "sofia");
+            List<String> team1 = Arrays.asList("andrea", "mirella");
+            List<String> teamFede = Arrays.asList("federico");
+            List<String> teamSofi = Arrays.asList("sofia");
+            List<String> teamMirella = Arrays.asList("mirella");
+            List<String> teamAndrea = Arrays.asList("andrea");
+
+            for (int i = 0; i <= 5; i++) {
+                overall.newMatch(getInstant(), teamFede, 10, teamSofi, 4);
+                Thread.sleep(10);
+            }
+
+            overall.rebuildRanking();
+            overall.printRanking();
+
 //        for (int i = 0; i < 1; i++) {
 //            overall.newMatch("federico" , 5, "sofia", 10);
 //            overall.printRanking();
@@ -40,23 +49,12 @@ public class Main {
 
 //        List<String> team0 = Arrays.asList("federico", "sofia");
 //        List<String> team1 = Arrays.asList("andrea", "mirella");
-//
-//        try {
-//            StorageBackend backendHandle = new FileStorageBackend();
-//            backendHandle.newRanking("overall");
-//            backendHandle.persistMatch("overall", getInstant(), team0,10, team1, 1 );
-//            Thread.sleep(100);
-//            backendHandle.persistMatch("overall", getInstant(), team0,10, team1, 2 );
-//            Thread.sleep(100);
-//            backendHandle.persistMatch("overall", getInstant(), team0,10, team1, 3 );
-//            Thread.sleep(100);
-//            backendHandle.persistMatch("overall", getInstant(), team0,10, team1, 4 );
-//            backendHandle.deleteMatch("overall", "T20170419-002004855");
-//            backendHandle.deleteMatch("overall", "T20170419-001935419");
-//            backendHandle.getPersistedMatches("overall").forEachRemaining(System.out::println);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String getInstant() {

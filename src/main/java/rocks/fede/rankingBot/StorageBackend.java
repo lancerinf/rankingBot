@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface StorageBackend {
 
-    public void newRanking(String rankingName) throws Exception;
-    public void persistMatch(String rankingName, String dateTime, List<String> team0, int team0_score, List<String> team1, int team1_score) throws Exception;
-    public void deleteMatch(String rankingName, String dateTime) throws Exception;
-    public Iterator getPersistedMatches(String rankingName) throws Exception;
+    public void newRanking(String rankingName) throws IOException;
+    public void persistMatch(String rankingName, String dateTime, List<String> team0, int team0_score, List<String> team1, int team1_score) throws IOException;
+    public void deleteMatch(String rankingName, String dateTime) throws IOException;
+    public Iterator<String> getPersistedMatches(String rankingName) throws IOException;
 }
