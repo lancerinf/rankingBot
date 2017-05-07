@@ -1,15 +1,11 @@
 package rocks.fede.rankingBot;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by fede on 18/04/17.
@@ -62,6 +58,20 @@ public class FileStorageBackend implements StorageBackend {
         else {
             throw new IOException("File " + rankingFilePath + " not found");
         }
+    }
+
+    @Override
+    public List<String> getLastMatches(String rankingName, int lastMatchesNumber) throws IOException {
+        if (lastMatchesNumber > StorageBackend.MAX_LAST_MATCHES_NUMBER)
+            throw new IOException("lastMatchesNumber exceeds maximum of " + StorageBackend.MAX_LAST_MATCHES_NUMBER);
+        Path rankingFilePath = Paths.get(FileStorageBackend.rankingFolder + "/" + FileStorageBackend.stripSpaces(rankingName) + ".csv");
+        if (Files.exists(rankingFilePath)) {
+            return Files.newBufferedReader(rankingFilePath).lines().sorted(Comparator.reverseOrder()).limit(lastMatchesNumber).collect(Collectors.toList());
+        }
+        else {
+            throw new IOException("File " + rankingFilePath + " not found");
+        }
+
     }
 
     @Override

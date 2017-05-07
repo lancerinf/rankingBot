@@ -69,7 +69,7 @@ public class Ranking {
             }
             this.ranking = newRanking;
         } catch (IOException e) {
-            System.out.println("There wan an error while rebuilding the ranking:");
+            System.out.println("There was an error while rebuilding the ranking:");
             e.printStackTrace();
         }
     }
