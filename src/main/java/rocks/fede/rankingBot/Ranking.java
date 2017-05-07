@@ -20,10 +20,6 @@ public class Ranking {
         backend.newRanking(name);
     }
 
-    public void setPlayerRanking(String playerName, double ranking) {
-        this.ranking.put(playerName, ranking);
-    }
-
     public void createTeam(Map<String, Double> ranking, List<String> team) {
         team.stream().forEach(player -> { if (! ranking.containsKey(player)) ranking.put(player, ScoreBot.TOP_RANK/2);});
     }
@@ -42,13 +38,16 @@ public class Ranking {
     }
 
     public void updateRankings(Map<String, Double> ranking, List<String> team0, int team0_score, List<String> team1, int team1_score) {
+        createTeam(ranking, team0);
+        createTeam(ranking, team1);
         double team0RankAdjustment = ScoreBot.getRankAdjustment(getTeamRank(ranking, team0), team0_score, getTeamRank(ranking, team1), team1_score);
         team0.stream().forEach(player -> updatePlayerRank(ranking, player, team0RankAdjustment));
         team1.stream().forEach(player -> updatePlayerRank(ranking, player, - team0RankAdjustment));
     }
 
     public void newMatch(String dateTime, List<String> team0, int team0_score, List<String> team1, int team1_score) throws IOException {
-        backend.persistMatch(this.name, dateTime, team0, team0_score, team1, team1_score);
+        backend.persistMatch(name, dateTime, team0, team0_score, team1, team1_score);
+        updateRankings(ranking, team0, team0_score, team1, team1_score);
     }
 
     public void rebuildRanking() {
@@ -63,8 +62,6 @@ public class Ranking {
                 int team0_score = Integer.parseInt(fields[2]);
                 List<String> team1 = Arrays.asList(fields[3].split(","));
                 int team1_score = Integer.parseInt(fields[4]);
-                createTeam(newRanking, team0);
-                createTeam(newRanking, team1);
                 updateRankings(newRanking,team0,team0_score,team1,team1_score);
             }
             this.ranking = newRanking;
@@ -75,8 +72,8 @@ public class Ranking {
     }
 
     public void printRanking() {
-        System.out.println(this.name);
-        this.ranking.entrySet().stream()
+        System.out.println(name);
+        ranking.entrySet().stream()
                 .sorted( (entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()) )
                 .forEach( entry -> System.out.println( entry.getKey() + " - " + entry.getValue()));
     }
