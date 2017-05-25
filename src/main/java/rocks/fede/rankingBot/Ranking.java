@@ -2,7 +2,6 @@ package rocks.fede.rankingBot;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Created by fede on 09/04/17.
@@ -21,7 +20,7 @@ public class Ranking {
     }
 
     public void createTeam(Map<String, Double> ranking, List<String> team) {
-        team.stream().forEach(player -> { if (! ranking.containsKey(player)) ranking.put(player, ScoreBot.TOP_RANK/2);});
+        team.stream().forEach(player -> { if (! ranking.containsKey(player)) ranking.put(player, ScoringMagic.TOP_RANK/2);});
     }
 
     public double getTeamRank(Map<String, Double> ranking, List<String> team) {
@@ -33,14 +32,14 @@ public class Ranking {
     }
 
     private void updatePlayerRank(Map<String, Double> ranking, String playerName, double suggestedRankAdjustment) {
-        double sndAdjustment = ScoreBot.sndRankAdjustment(ranking.get(playerName), suggestedRankAdjustment);
+        double sndAdjustment = ScoringMagic.sndRankAdjustment(ranking.get(playerName), suggestedRankAdjustment);
         ranking.put(playerName, ranking.get(playerName) + sndAdjustment);
     }
 
     public void updateRankings(Map<String, Double> ranking, List<String> team0, int team0_score, List<String> team1, int team1_score) {
         createTeam(ranking, team0);
         createTeam(ranking, team1);
-        double team0RankAdjustment = ScoreBot.getRankAdjustment(getTeamRank(ranking, team0), team0_score, getTeamRank(ranking, team1), team1_score);
+        double team0RankAdjustment = ScoringMagic.getRankAdjustment(getTeamRank(ranking, team0), team0_score, getTeamRank(ranking, team1), team1_score);
         team0.stream().forEach(player -> updatePlayerRank(ranking, player, team0RankAdjustment));
         team1.stream().forEach(player -> updatePlayerRank(ranking, player, - team0RankAdjustment));
     }

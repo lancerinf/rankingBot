@@ -3,7 +3,7 @@ package rocks.fede.rankingBot;
 /**
  * Created by fede on 09/04/17.
  */
-public class ScoreBot {
+public class ScoringMagic {
 
     // TOP_RANK is the maximum theoretical rank that a player can tend to.
     public static final double TOP_RANK = 100;
