@@ -1,5 +1,7 @@
 package rocks.fede.rankingBot;
 
+import rocks.fede.rankingBot.storage.StorageBackend;
+
 import java.io.IOException;
 import java.util.*;
 

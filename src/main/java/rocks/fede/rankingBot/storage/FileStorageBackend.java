@@ -1,4 +1,4 @@
-package rocks.fede.rankingBot;
+package rocks.fede.rankingBot.storage;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -62,8 +62,8 @@ public class FileStorageBackend implements StorageBackend {
 
     @Override
     public List<String> getLastMatches(String rankingName, int lastMatchesNumber) throws IOException {
-        if (lastMatchesNumber > StorageBackend.MAX_LAST_MATCHES_NUMBER)
-            throw new IOException("lastMatchesNumber exceeds maximum of " + StorageBackend.MAX_LAST_MATCHES_NUMBER);
+        if (lastMatchesNumber > MAX_LAST_MATCHES_NUMBER)
+            throw new IOException("lastMatchesNumber exceeds maximum of " + MAX_LAST_MATCHES_NUMBER);
         Path rankingFilePath = Paths.get(FileStorageBackend.rankingFolder + "/" + FileStorageBackend.stripSpaces(rankingName) + ".csv");
         if (Files.exists(rankingFilePath)) {
             return Files.newBufferedReader(rankingFilePath).lines().sorted(Comparator.reverseOrder()).limit(lastMatchesNumber).collect(Collectors.toList());

@@ -1,5 +1,8 @@
 package rocks.fede.rankingBot;
 
+import rocks.fede.rankingBot.storage.FileStorageBackend;
+import rocks.fede.rankingBot.storage.StorageBackend;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

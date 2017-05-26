@@ -1,4 +1,4 @@
-package rocks.fede.rankingBot;
+package rocks.fede.rankingBot.storage;
 
 import java.io.IOException;
 import java.util.Iterator;
