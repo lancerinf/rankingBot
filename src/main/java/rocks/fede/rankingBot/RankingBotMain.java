@@ -8,7 +8,6 @@ import static java.util.Objects.isNull;
  * Created by fede on 5/25/17.
  */
 public class RankingBotMain {
-    //TODO load parameters from environment
 
     private static String loadParameterFromEnv(String parameterName) {
         String parameter = System.getenv(parameterName);
@@ -19,11 +18,13 @@ public class RankingBotMain {
     }
 
 
-    //TODO start an instance of RankingBot
-
     public static void main(String[] args) {
         String SLACK_API_TOKEN = loadParameterFromEnv("SLACK_API_TOKEN");
 
+        RankingBot rbot = RankingBot.newBuilder()
+                .setApiToken(SLACK_API_TOKEN)
+                .build();
 
+        //TODO start rbot
     }
 }
