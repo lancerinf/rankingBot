@@ -8,6 +8,9 @@ public class ScoringMagic {
     // TOP_RANK is the maximum theoretical rank that a player can tend to.
     public static final double TOP_RANK = 100;
 
+    // MEAN_RANK is the mean rank between 0 and TOP_RANK. It is the starting rank of a new player.
+    public static final double MEAN_RANK = TOP_RANK / 2;
+
     // MAX_RANK_ADJUSTMENT is the maximum rank adjustment per game.
     public static final double MAX_RANK_ADJUSTMENT = TOP_RANK/10;
 
@@ -26,7 +29,7 @@ public class ScoringMagic {
     };
 
     public static double sndRankAdjustment(double currentRank, double suggestedAdjustment) {
-        double normalRank = ((currentRank - TOP_RANK/2) / (TOP_RANK/2)) * SND_VALUE_EXPANSION;
+        double normalRank = ((currentRank - MEAN_RANK) / MEAN_RANK) * SND_VALUE_EXPANSION;
         return suggestedAdjustment * (sndVal(normalRank) - sndVal(SND_VALUE_EXPANSION)) * SND_RANGE_ADJUSTMENT;
     }
 

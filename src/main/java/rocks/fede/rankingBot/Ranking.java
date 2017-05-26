@@ -20,7 +20,7 @@ public class Ranking {
     }
 
     public void createTeam(Map<String, Double> ranking, List<String> team) {
-        team.stream().forEach(player -> { if (! ranking.containsKey(player)) ranking.put(player, ScoringMagic.TOP_RANK/2);});
+        team.stream().forEach(player -> { if (! ranking.containsKey(player)) ranking.put(player, ScoringMagic.MEAN_RANK);});
     }
 
     public double getTeamRank(Map<String, Double> ranking, List<String> team) {
