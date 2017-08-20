@@ -25,6 +25,6 @@ public class RankingBotMain {
                 .setApiToken(SLACK_API_TOKEN)
                 .build();
 
-        //TODO start rbot
+        rbot.run();
     }
 }

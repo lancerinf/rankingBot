@@ -12,6 +12,7 @@ public class RankingBot implements Runnable {
     @Override
     public void run() {
         //TODO implement websocket connection
+        //TODO search for existing data
     }
 
     public RankingBot(RankingBotBuilder builder) {
@@ -36,7 +37,4 @@ public class RankingBot implements Runnable {
             return new RankingBot(this);
         }
     }
-
-    //TODO search for existing data
-    //TODO setup connection to Slack API
 }
